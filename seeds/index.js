@@ -16,9 +16,8 @@ db.once("open", () => {
 
 const seedDB = async () => {
     await Club.deleteMany({});
-    for (let i = 0; i < 7; i++) {
-        const random = Math.floor(Math.random() * 13);
-        const club = new Club(seedData[random]);
+    for (let i = 0; i < 13; i++) {
+        const club = new Club(seedData[i]);
         await club.save();
     }
 }

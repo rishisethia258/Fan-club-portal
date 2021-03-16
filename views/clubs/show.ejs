@@ -1,31 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout('layouts/template')%>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show</title>
-</head>
-
-<body>
-    <h1>
-        <%= club.name %>
-    </h1>
-    <p>
-        <%= club.description %>
-    </p>
-    <p>
-        <a href="/clubs/<%= club._id %>/edit">Edit Club</a>
-    </p>
-    <p>
-    <form action="/clubs/<%= club._id %>?_method=DELETE" method="POST">
-        <button>Delete Club</button>
-    </form>
-    </p>
-    <footer>
-        <a href="/clubs"> All Clubs </a>
-    </footer>
-</body>
-
-</html>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card mb-3">
+                <img src="<%= club.image%>" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= club.name%>
+                    </h5>
+                    <p class="card-text">
+                        <%= club.description%>
+                    </p>
+                </div>
+                <div class="card-body">
+                    <a class="card-link btn btn-info" href="/clubs/<%=club._id%>/edit">Edit</a>
+                    <form class="d-inline" action="/clubs/<%=club._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+                <div class="card-footer text-muted">
+                    2 days ago
+                </div>
+            </div>
+        </div>
+    </div>

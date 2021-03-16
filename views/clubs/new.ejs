@@ -1,29 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout('layouts/template')%>
+    <div class="row">
+        <h1 class="text-center">Create New Club</h1>
+        <div class="col-6 offset-3">
+            <form action="/clubs" method="POST">
+                <div class="mb-3">
+                    <label class="form-label" for="name">Club Name</label>
+                    <input class="form-control" type="text" id="name" name="club[name]">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="image">Club Image</label>
+                    <input class="form-control" type="text" id="image" name="club[image]">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="club[description]"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-success">Create Club</button>
+                </div>
+            </form>
+            <a href="/clubs">Back To All Clubs</a>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Club</title>
-</head>
-
-<body>
-    <h1>Create New Club</h1>
-    <form action="/clubs" method="POST">
-        <div>
-            <label for="name">Club Name</label>
-            <input type="text" id='name' name='club[name]'>
         </div>
-        <div>
-            <label for="description">Description</label>
-            <input type="text" id='description' name='club[description]'>
-        </div>
-        <button>Add Club</button>
-
-    </form>
-
-    <a href="/clubs">All Clubs</a>
-</body>
-
-</html>
+    </div>

@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const ClubSchema = new Schema({
     name: String,
+    image: String,
     description: String
 });
 
