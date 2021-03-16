@@ -2,18 +2,28 @@
     <div class="row">
         <h1 class="text-center">Create New Club</h1>
         <div class="col-6 offset-3">
-            <form action="/clubs" method="POST">
+            <form action="/clubs" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label class="form-label" for="name">Club Name</label>
-                    <input class="form-control" type="text" id="name" name="club[name]">
+                    <input class="form-control" type="text" id="name" name="club[name]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="image">Club Image</label>
-                    <input class="form-control" type="text" id="image" name="club[image]">
+                    <input class="form-control" type="text" id="image" name="club[image]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description" name="club[description]"></textarea>
+                    <textarea class="form-control" type="text" id="description" name="club[description]"
+                        required></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-success">Create Club</button>

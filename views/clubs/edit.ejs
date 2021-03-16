@@ -2,19 +2,30 @@
     <div class="row">
         <h1 class="text-center">Edit Club</h1>
         <div class="col-6 offset-3">
-            <form action="/clubs/<%=club._id%>?_method=PUT" method="POST">
+            <form action="/clubs/<%=club._id%>?_method=PUT" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label class="form-label" for="name">Club Name</label>
-                    <input class="form-control" type="text" id="name" name="club[name]" value="<%= club.name %>">
+                    <input class="form-control" type="text" id="name" name="club[name]" value="<%= club.name %>"
+                        required>
+                    <div class="valid-feedback">
+                        Looks Good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="image">Club Image</label>
-                    <input class="form-control" type="text" id="image" name="club[image]" value="<%=club.image %>">
+                    <input class="form-control" type="text" id="image" name="club[image]" value="<%=club.image %>"
+                        required>
+                    <div class="valid-feedback">
+                        Looks Good!
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="description">Description</label>
+                    <label class="form-label" for="description" required>Description</label>
                     <textarea class="form-control" type="text" id="description"
                         name="club[description]"><%= club.description%></textarea>
+                    <div class="valid-feedback">
+                        Looks Good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-info">Update Club</button>
