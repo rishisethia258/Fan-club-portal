@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Club</title>
+</head>
+
+<body>
+    <h1>Edit Club Details</h1>
+    <form action="/clubs/<%= club.id %>?_method=PUT" method="POST">
+        <div>
+            <label for="name">Club Name</label>
+            <input type="text" id='name' name='club[name]' value="<%= club.name %>">
+        </div>
+        <div>
+            <label for="description">Description</label>
+            <input type="text" id='description' name='club[description]' value="<%= club.description %>">
+        </div>
+        <button>Update Club</button>
+
+    </form>
+
+    <a href="/clubs/<%= club._id %>">Back to Club</a>
+</body>
+
+</html>

@@ -15,6 +15,17 @@
     <p>
         <%= club.description %>
     </p>
+    <p>
+        <a href="/clubs/<%= club._id %>/edit">Edit Club</a>
+    </p>
+    <p>
+    <form action="/clubs/<%= club._id %>?_method=DELETE" method="POST">
+        <button>Delete Club</button>
+    </form>
+    </p>
+    <footer>
+        <a href="/clubs"> All Clubs </a>
+    </footer>
 </body>
 
 </html>
