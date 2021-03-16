@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const seedData = require('./seed');
-const Group = require('../models/group');
+const Club = require('../models/club');
 
 mongoose.connect('mongodb://localhost:27017/fan-club', {
     useNewUrlParser: true,
@@ -15,11 +15,11 @@ db.once("open", () => {
 });
 
 const seedDB = async () => {
-    await Group.deleteMany({});
+    await Club.deleteMany({});
     for (let i = 0; i < 7; i++) {
         const random = Math.floor(Math.random() * 13);
-        const group = new Group(seedData[random]);
-        await group.save();
+        const club = new Club(seedData[random]);
+        await club.save();
     }
 }
 

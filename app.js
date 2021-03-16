@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-const Group = require('./models/group');
+const Club = require('./models/club');
 
 mongoose.connect('mongodb://localhost:27017/fan-club', {
     useNewUrlParser: true,
@@ -22,12 +22,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.get('/', (req, res) => {
     res.render('home');
 });
+app.get('/clubs', async (req, res) => {
+    const clubs = await Club.find({});
+    res.render('clubs/index', { clubs });
+});
 
-app.get('/makegroup', async (req, res) => {
-    const group = new Group({ name: 'thanos', description: 'Give me the infinity Stones !!' });
-    await group.save();
-    res.send(group);
-    console.log(group);
+app.get('/clubs/:id', async (req, res) => {
+    const club = await Club.findById(req.params.id);
+    res.render('clubs/show', { club });
 });
 
 app.listen(3000, () => {
