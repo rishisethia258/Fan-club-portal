@@ -2,17 +2,19 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const { clubSchema, chatSchema } = require('./schemas.js');
-const catchAsync = require('./utils/catchAsync');
+const session = require('express-session');
+const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-const Club = require('./models/club');
-const Chat = require('./models/chat');
+
+const clubs = require('./routes/clubs');
+const chats = require('./routes/chats');
 
 mongoose.connect('mongodb://localhost:27017/fan-club', {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 const db = mongoose.connection;
@@ -29,88 +31,33 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-const validateClub = (req, res, next) => {
-    const { error } = clubSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(e => e.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
+const sessionConfig = {
+    secret: 'nothingmuch',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 24000 * 3600 * 7,
+        maxAge: 24000 * 3600 * 7
     }
 }
+app.use(session(sessionConfig));
+app.use(flash());
 
-const validateChat = (req, res, next) => {
-    const { error } = chatSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(e => e.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-}
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+});
+
+app.use('/clubs', clubs);
+app.use('/clubs/:id/chat', chats);
 
 app.get('/', (req, res) => {
     res.render('home');
 });
-app.get('/clubs', catchAsync(async (req, res) => {
-    const clubs = await Club.find({});
-    res.render('clubs/index', { clubs });
-}));
-
-app.get('/clubs/new', (req, res) => {
-    res.render('clubs/new');
-});
-
-app.post('/clubs', validateClub, catchAsync(async (req, res, next) => {
-    const club = new Club(req.body.club);
-    await club.save();
-    res.redirect(`/clubs/${club._id}`);
-}));
-
-app.get('/clubs/:id', catchAsync(async (req, res) => {
-    const club = await Club.findById(req.params.id);
-    res.render('clubs/show', { club });
-}));
-
-app.get('/clubs/:id/edit', catchAsync(async (req, res) => {
-    const club = await Club.findById(req.params.id);
-    res.render('clubs/edit', { club });
-}));
-
-app.put('/clubs/:id', catchAsync(async (req, res) => {
-    const id = req.params.id;
-    const club = await Club.findByIdAndUpdate(id, { ...req.body.club });
-    res.redirect(`/clubs/${club._id}`);
-}));
-
-app.delete('/clubs/:id', catchAsync(async (req, res) => {
-    const id = req.params.id;
-    await Club.findByIdAndDelete(id);
-    res.redirect('/clubs');
-}));
-
-app.get('/clubs/:id/chat', catchAsync(async (req, res) => {
-    const club = await Club.findById(req.params.id).populate('chats');
-    res.render('chat', { club });
-}));
-
-app.post('/clubs/:id/chat', validateChat, catchAsync(async (req, res) => {
-    const club = await Club.findById(req.params.id);
-    const chat = new Chat(req.body.chat);
-    club.chats.push(chat);
-    await chat.save();
-    await club.save();
-    const { id } = req.params;
-    res.redirect(`/clubs/${club._id}/chat`);
-}));
-
-app.delete('/clubs/:id/chat/:chatId', catchAsync(async (req, res) => {
-    const { id, chatId } = req.params;
-    await Club.findByIdAndUpdate(id, { $pull: { chats: chatId } })
-    await Chat.findByIdAndDelete(chatId);
-    res.redirect(`/clubs/${id}/chat`);
-}));
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found!', 404));
