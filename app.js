@@ -2,11 +2,12 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const { clubSchema } = require('./schemas.js');
+const { clubSchema, chatSchema } = require('./schemas.js');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const Club = require('./models/club');
+const Chat = require('./models/chat');
 
 mongoose.connect('mongodb://localhost:27017/fan-club', {
     useNewUrlParser: true,
@@ -31,6 +32,16 @@ app.use(methodOverride('_method'));
 
 const validateClub = (req, res, next) => {
     const { error } = clubSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(e => e.message).join(',');
+        throw new ExpressError(msg, 400);
+    } else {
+        next();
+    }
+}
+
+const validateChat = (req, res, next) => {
+    const { error } = chatSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(e => e.message).join(',');
         throw new ExpressError(msg, 400);
@@ -77,6 +88,28 @@ app.delete('/clubs/:id', catchAsync(async (req, res) => {
     const id = req.params.id;
     await Club.findByIdAndDelete(id);
     res.redirect('/clubs');
+}));
+
+app.get('/clubs/:id/chat', catchAsync(async (req, res) => {
+    const club = await Club.findById(req.params.id).populate('chats');
+    res.render('chat', { club });
+}));
+
+app.post('/clubs/:id/chat', validateChat, catchAsync(async (req, res) => {
+    const club = await Club.findById(req.params.id);
+    const chat = new Chat(req.body.chat);
+    club.chats.push(chat);
+    await chat.save();
+    await club.save();
+    const { id } = req.params;
+    res.redirect(`/clubs/${club._id}/chat`);
+}));
+
+app.delete('/clubs/:id/chat/:chatId', catchAsync(async (req, res) => {
+    const { id, chatId } = req.params;
+    await Club.findByIdAndUpdate(id, { $pull: { chats: chatId } })
+    await Chat.findByIdAndDelete(chatId);
+    res.redirect(`/clubs/${id}/chat`);
 }));
 
 app.all('*', (req, res, next) => {

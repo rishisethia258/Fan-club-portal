@@ -1,0 +1,28 @@
+<% layout('layouts/template')%>
+    <% for(let chat of club.chats) { %>
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="card-text">
+                    <p>
+                        <%= chat.message %>
+                    </p>
+                </div>
+                <form action="/clubs/<%= club._id %>/chat/<%= chat._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger btn-sm">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <% } %>
+            <form action="/clubs/<%= club._id %>/chat" class="mb-3 validated-form" novalidate method="POST">
+                <div class="mb-3">
+                    <label class="form-label" for="message">Message</label>
+                    <textarea class="form-control" type="text" id="message" name="chat[message]" required></textarea>
+                    <div class="valid-feedback">
+                        Looks Good!
+                    </div>
+                </div>
+                <button class="btn btn-success">Send</button>
+            </form>

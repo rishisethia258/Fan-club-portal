@@ -7,3 +7,9 @@ module.exports.clubSchema = Joi.object({
         description: Joi.string().required()
     }).required()
 });
+
+module.exports.chatSchema = Joi.object({
+    chat: Joi.object({
+        message: Joi.string().required()
+    }).required()
+});
