@@ -1,29 +1,20 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const catchAsync = require('../utils/catchAsync');
-const { chatSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const Chat = require('../models/chat');
 const Club = require('../models/club');
+const { isLoggedIn, validateChat, isAuthor } = require('../middleware/middleware');
 
-const validateChat = (req, res, next) => {
-    const { error } = chatSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(e => e.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-}
-
-router.get('/', catchAsync(async (req, res) => {
-    const club = await Club.findById(req.params.id).populate('chats');
+router.get('/', isLoggedIn, catchAsync(async (req, res) => {
+    const club = await Club.findById(req.params.id).populate({ path: 'chats', populate: { path: 'author' } });
     res.render('chat', { club });
 }));
 
-router.post('/', validateChat, catchAsync(async (req, res) => {
+router.post('/', isLoggedIn, validateChat, catchAsync(async (req, res) => {
     const club = await Club.findById(req.params.id);
     const chat = new Chat(req.body.chat);
+    chat.author = req.user._id;
     club.chats.push(chat);
     await chat.save();
     await club.save();
@@ -31,7 +22,7 @@ router.post('/', validateChat, catchAsync(async (req, res) => {
     res.redirect(`/clubs/${club._id}/chat`);
 }));
 
-router.delete('/:chatId', catchAsync(async (req, res) => {
+router.delete('/:chatId', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const { id, chatId } = req.params;
     await Club.findByIdAndUpdate(id, { $pull: { chats: chatId } })
     await Chat.findByIdAndDelete(chatId);

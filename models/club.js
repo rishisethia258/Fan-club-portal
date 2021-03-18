@@ -6,6 +6,10 @@ const ClubSchema = new Schema({
     name: String,
     image: String,
     description: String,
+    admin: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     chats: [
         {
             type: Schema.Types.ObjectId,
