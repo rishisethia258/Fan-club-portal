@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const { clubSchema } = require('../schemas.js');
+const { isLoggedIn } = require('../middleware/middleware');
 const ExpressError = require('../utils/ExpressError');
 const Club = require('../models/club');
 const mongoose = require('mongoose');
@@ -21,11 +22,11 @@ router.get('/', catchAsync(async (req, res) => {
     res.render('clubs/index', { clubs });
 }));
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('clubs/new');
 });
 
-router.post('/', validateClub, catchAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateClub, catchAsync(async (req, res, next) => {
     const club = new Club(req.body.club);
     await club.save();
     req.flash('success', 'Successfully made a new Club!');
@@ -45,7 +46,7 @@ router.get('/:id', catchAsync(async (req, res) => {
     res.render('clubs/show', { club });
 }));
 
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         req.flash('error', 'Club Not Found !!!');
         return res.redirect('/clubs');
@@ -58,14 +59,14 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
     res.render('clubs/edit', { club });
 }));
 
-router.put('/:id', catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const id = req.params.id;
     const club = await Club.findByIdAndUpdate(id, { ...req.body.club });
     req.flash('success', 'Successfully updated the Club!');
     res.redirect(`/clubs/${club._id}`);
 }));
 
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const id = req.params.id;
     await Club.findByIdAndDelete(id);
     req.flash('success', 'Your club was successfully deleted');

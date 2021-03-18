@@ -6,9 +6,13 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
-const clubs = require('./routes/clubs');
-const chats = require('./routes/chats');
+const userRoutes = require('./routes/users');
+const clubRoutes = require('./routes/clubs');
+const chatRoutes = require('./routes/chats');
 
 mongoose.connect('mongodb://localhost:27017/fan-club', {
     useNewUrlParser: true,
@@ -46,14 +50,23 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    res.locals.currentUser = req.user;
     next();
 });
 
-app.use('/clubs', clubs);
-app.use('/clubs/:id/chat', chats);
+app.use('/', userRoutes);
+app.use('/clubs', clubRoutes);
+app.use('/clubs/:id/chat', chatRoutes);
 
 app.get('/', (req, res) => {
     res.render('home');
