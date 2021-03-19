@@ -2,6 +2,7 @@ const { clubSchema, chatSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const Club = require('../models/club');
 const Chat = require('../models/chat');
+const club = require('../models/club');
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -50,4 +51,14 @@ module.exports.isAuthor = async (req, res, next) => {
         return res.redirect(`/clubs/${id}/chat`);
     }
     next();
+}
+
+module.exports.isMemberOrAdmin = async (req, res, next) => {
+    const { id } = req.params;
+    const foundClub = await Club.findById(id);
+    if (foundClub.admin.equals(req.user._id) || foundClub.members.indexOf(req.user._id) !== -1) {
+        return next();
+    }
+    req.flash('error', 'You shall join the club first');
+    return res.redirect(`/clubs/${id}`);
 }

@@ -4,10 +4,10 @@ const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const Chat = require('../models/chat');
 const Club = require('../models/club');
-const { isLoggedIn, validateChat, isAuthor } = require('../middleware/middleware');
+const { isLoggedIn, validateChat, isAuthor, isMemberOrAdmin } = require('../middleware/middleware');
 
-router.get('/', isLoggedIn, catchAsync(async (req, res) => {
-    const club = await Club.findById(req.params.id).populate({ path: 'chats', populate: { path: 'author' } });
+router.get('/', isLoggedIn, isMemberOrAdmin, catchAsync(async (req, res) => {
+    const club = await (await Club.findById(req.params.id).populate({ path: 'chats', populate: { path: 'author' } }).populate('members')).populate('admin').execPopulate();
     res.render('chat', { club });
 }));
 

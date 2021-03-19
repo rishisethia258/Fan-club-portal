@@ -10,6 +10,12 @@ const ClubSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
     chats: [
         {
             type: Schema.Types.ObjectId,

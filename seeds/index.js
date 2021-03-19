@@ -18,7 +18,7 @@ const seedDB = async () => {
     await Club.deleteMany({});
     for (let i = 0; i < 13; i++) {
         const club = new Club({
-            admin: '60533010107dda10443f6b03',
+            admin: '6054b9c1ec3c905e701cb9db',
             name: seedData[i].name,
             image: seedData[i].image,
             description: seedData[i].description

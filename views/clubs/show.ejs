@@ -19,7 +19,15 @@
                             <button class="btn btn-danger">Delete</button>
                         </form>
                         <% } %>
-                            <a href="/clubs/<%=club._id%>/chat" class="btn btn-success">Go To Chat</a>
+                            <% if(currentUser) { %>
+                                <%if(club.admin.equals(currentUser._id)||club.members.indexOf(currentUser._id)!=-1){%>
+                                    <a href="/clubs/<%=club._id%>/chat" class="btn btn-success">Go To Chat</a>
+                                    <% } else { %>
+                                        <form class="d-inline" action="/clubs/<%=club._id%>/join" method="POST">
+                                            <button class="btn btn-primary">Join Club</button>
+                                        </form>
+                                        <% } %>
+                                            <% } %>
                 </div>
                 <div class="card-body">
                     <p class="card-text text-muted">

@@ -3,6 +3,7 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const { isLoggedIn, validateClub, isAdmin } = require('../middleware/middleware');
 const Club = require('../models/club');
+const User = require('../models/user');
 const mongoose = require('mongoose');
 
 router.get('/', catchAsync(async (req, res) => {
@@ -40,6 +41,26 @@ router.get('/:id/edit', isLoggedIn, isAdmin, catchAsync(async (req, res) => {
         return res.redirect('/clubs');
     }
     res.render('clubs/edit', { club });
+}));
+
+router.post('/:id/join', isLoggedIn, catchAsync(async (req, res) => {
+    const club = await Club.findById(req.params.id);
+    const user = await User.findById(req.user._id);
+    if (club.admin.equals(user._id)) {
+        req.flash('error', `You are the admin of the club`);
+        return res.redirect(`/clubs/${club._id}`);
+    }
+    if (club.members.indexOf(user._id) == -1) {
+        user.memberOf.push(club);
+        club.members.push(req.user);
+    } else {
+        req.flash('error', `You are already the member of this club`);
+        return res.redirect(`/clubs/${club._id}`);
+    }
+    await club.save();
+    await user.save();
+    req.flash('success', `Congratulations, You are now a member of ${club.name} club`);
+    res.redirect(`/clubs/${club._id}`);
 }));
 
 router.put('/:id', isLoggedIn, isAdmin, validateClub, catchAsync(async (req, res) => {
