@@ -4,6 +4,11 @@ const passport = require('passport');
 const User = require('../models/user');
 const catchAsync = require('../utils/catchAsync');
 
+router.get('/users/:username', catchAsync(async (req, res) => {
+    const foundUser = await User.find({ username: req.params.username });
+    const user = foundUser[0];
+    res.render('users/show', { user });
+}));
 
 router.get('/register', (req, res) => {
     res.render('users/register');
