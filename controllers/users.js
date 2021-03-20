@@ -1,7 +1,7 @@
 const User = require('../models/user');
 
 module.exports.userShowPage = async (req, res) => {
-    const foundUser = await User.find({ username: req.params.username });
+    const foundUser = await User.find({ username: req.params.username }).populate('memberOf').populate('adminOf');
     const user = foundUser[0];
     res.render('users/show', { user });
 };
@@ -12,8 +12,8 @@ module.exports.renderRegister = (req, res) => {
 
 module.exports.register = async (req, res, next) => {
     try {
-        const { email, username, password } = req.body;
-        const user = new User({ email, username });
+        const { email, username, password, description } = req.body;
+        const user = new User({ email, username, description });
         const registeredUser = await User.register(user, password);
         req.login(registeredUser, err => {
             if (err) return next(err);

@@ -13,8 +13,11 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createClub = async (req, res, next) => {
     const club = new Club(req.body.club);
+    const user = await User.findById(req.user._id);
     club.admin = req.user._id;
+    user.adminOf.push(club);
     await club.save();
+    await user.save();
     req.flash('success', 'Successfully made a new Club!');
     res.redirect(`/clubs/${club._id}`);
 };

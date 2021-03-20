@@ -1,7 +1,59 @@
 <% layout('layouts/template') %>
-    <h1>
-        <%= user.username %>
-    </h1>
-    <h4>
-        <%= user.email %>
-    </h4>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-9 col-sm-12">
+            <div class="card shadow mb-3">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <p class="card-text mb-0 text-muted">
+                            Username
+                        </p>
+                        <h5 class="card-title">
+                            <%= user.username %>
+                        </h5>
+                    </li>
+                    <li class="list-group-item">
+                        <p class="card-text mb-0 text-muted">
+                            Email
+                        </p>
+                        <h5 class="card-title">
+                            <%= user.email %>
+                        </h5>
+                    </li>
+                    <li class="list-group-item">
+                        <p class="card-text">
+                            <%= user.description %>
+                        </p>
+                    </li>
+                    <% if(user.adminOf.length) { %>
+                        <li class="list-group-item">
+                            <p class="card-text mb-0 text-muted fs-6">
+                                Admin Of
+                            </p>
+                            <% for(club of user.adminOf) {%>
+                                <span class="badge rounded-pill bg-primary">
+                                    <a href="/clubs/<%= club._id %>" class="text-white text-decoration-none">
+                                        <%= club.name %>
+                                    </a>
+                                </span>
+                                <% } %>
+                        </li>
+                        <% } %>
+                            <% if(user.memberOf.length) {%>
+                                <li class="list-group-item">
+                                    <p class="card-text mb-0 text-muted fs-6">
+                                        Member Of
+                                    </p>
+                                    <% for(club of user.memberOf) {%>
+                                        <span class="badge rounded-pill bg-secondary">
+                                            <a href="/clubs/<%= club._id %>" class="text-white text-decoration-none">
+                                                <%= club.name %>
+                                            </a>
+                                        </span>
+                                        <% } %>
+                                </li>
+                                <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>
