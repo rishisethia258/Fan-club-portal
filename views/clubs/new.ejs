@@ -1,35 +1,42 @@
 <% layout('layouts/template')%>
-    <div class="row">
-        <h1 class="text-center">Create New Club</h1>
-        <div class="col-6 offset-3">
-            <form action="/clubs" method="POST" novalidate class="validated-form">
-                <div class="mb-3">
-                    <label class="form-label" for="name">Club Name</label>
-                    <input class="form-control" type="text" id="name" name="club[name]" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="image">Club Image</label>
-                    <input class="form-control" type="text" id="image" name="club[image]" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description" name="club[description]"
-                        required></textarea>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <button class="btn btn-success">Create Club</button>
-                </div>
-            </form>
-            <a href="/clubs">Back To All Clubs</a>
+    <% layout('layouts/template')%>
 
+        <div class="container d-flex justify-content-center align-items-center mb-4">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+                    <div class="card shadow">
+                        <img src="https://i.ytimg.com/vi/QMMr_T4YXvU/maxresdefault.jpg" alt="" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="card-title">Create New Club</h5>
+                            <form action="/clubs" method="POST" class="validated-form" novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label" for="name">Club Name</label>
+                                    <input class="form-control" type="text" id="name" name="club[name]" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="image">Club Image</label>
+                                    <input class="form-control" type="text" id="image" name="club[image]" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="description">Description</label>
+                                    <textarea class="form-control" type="text" id="description" name="club[description]"
+                                        required></textarea>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-success">Create Club</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
