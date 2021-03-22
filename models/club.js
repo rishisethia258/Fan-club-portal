@@ -6,10 +6,14 @@ const ClubSchema = new Schema({
     name: String,
     image: String,
     description: String,
-    admin: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    createdAt: { type: Date, default: Date.now },
+    createdBy: String,
+    admins: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
     members: [
         {
             type: Schema.Types.ObjectId,

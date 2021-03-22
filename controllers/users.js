@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Club = require('../models/club');
 
 module.exports.userShowPage = async (req, res) => {
     const foundUser = await User.find({ username: req.params.username }).populate('memberOf').populate('adminOf');
@@ -42,3 +43,16 @@ module.exports.logout = (req, res) => {
     req.flash('success', 'Goodbye, Logged you out successfully');
     res.redirect('/clubs');
 };
+
+module.exports.makeAdmin = async (req, res) => {
+    const { id, userID } = req.params;
+    const club = await Club.findById(id);
+    const user = await User.findById(userID);
+    club.members.splice(club.members.indexOf(user._id), 1);
+    club.admins.push(user._id);
+    user.memberOf.splice(user.memberOf.indexOf(club._id), 1);
+    user.adminOf.push(club._id);
+    await club.save();
+    await user.save();
+    res.redirect(`/clubs/${id}/chat`);
+}

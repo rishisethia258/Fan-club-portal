@@ -17,14 +17,15 @@ db.once("open", () => {
 
 const seedDB = async () => {
     await Club.deleteMany({});
-    const user = await User.findById('6055c5773e9ddc28bc346b13');
+    const user = await User.findById('6058546322d7541294bbf9b5');
     for (let i = 0; i < seedData.length; i++) {
         const club = new Club({
-            admin: '6055c5773e9ddc28bc346b13',
             name: seedData[i].name,
             image: seedData[i].image,
-            description: seedData[i].description
+            description: seedData[i].description,
+            createdBy: user.username
         });
+        club.admins.push(user);
         user.adminOf.push(club);
         await club.save();
     }

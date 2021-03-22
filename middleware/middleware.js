@@ -26,9 +26,19 @@ module.exports.validateClub = (req, res, next) => {
 module.exports.isAdmin = async (req, res, next) => {
     const { id } = req.params;
     const foundClub = await Club.findById(id);
-    if (!foundClub.admin.equals(req.user._id)) {
+    if (foundClub.admins.indexOf(req.user._id) === -1) {
         req.flash('error', 'You do not have permission to do that!');
         return res.redirect(`/clubs/${id}`);
+    }
+    next();
+}
+
+module.exports.isAdminOfChat = async (req, res, next) => {
+    const { id } = req.params;
+    const foundClub = await Club.findById(id);
+    if (foundClub.admins.indexOf(req.user._id) === -1) {
+        req.flash('error', 'You do not have permission to do that!');
+        return res.redirect(`/clubs/${id}/chat`);
     }
     next();
 }
@@ -56,7 +66,7 @@ module.exports.isAuthor = async (req, res, next) => {
 module.exports.isMemberOrAdmin = async (req, res, next) => {
     const { id } = req.params;
     const foundClub = await Club.findById(id);
-    if (foundClub.admin.equals(req.user._id) || foundClub.members.indexOf(req.user._id) !== -1) {
+    if (foundClub.admins.indexOf(req.user._id) !== -1 || foundClub.members.indexOf(req.user._id) !== -1) {
         return next();
     }
     req.flash('error', 'You shall join the club first');

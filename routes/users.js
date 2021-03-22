@@ -4,6 +4,7 @@ const passport = require('passport');
 const User = require('../models/user');
 const catchAsync = require('../utils/catchAsync');
 const users = require('../controllers/users');
+const { isLoggedIn, isAdminOfChat } = require('../middleware/middleware');
 
 router.get('/users/:username', catchAsync(users.userShowPage));
 
@@ -16,5 +17,7 @@ router.route('/login')
     .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), users.login);
 
 router.get('/logout', users.logout);
+
+router.post('/clubs/:id/users/:userID', isLoggedIn, isAdminOfChat, catchAsync(users.makeAdmin));
 
 module.exports = router;

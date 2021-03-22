@@ -2,7 +2,7 @@ const Chat = require('../models/chat');
 const Club = require('../models/club');
 
 module.exports.showChatPage = async (req, res) => {
-    const club = await (await Club.findById(req.params.id).populate({ path: 'chats', populate: { path: 'author' } }).populate('members')).populate('admin').execPopulate();
+    const club = await (await Club.findById(req.params.id).populate({ path: 'chats', populate: { path: 'author' } }).populate('members')).populate('admins').execPopulate();
     res.render('chat', { club });
 };
 

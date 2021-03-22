@@ -1,13 +1,13 @@
 module.exports = [
     {
-        name: 'Iron Man',
-        image: 'https://www.lego.com/cdn/cs/set/assets/bltfd0a02fe95ebbe70/CP_IronMan_Sidekick-Tall2.jpg?fit=crop&format=jpg&quality=80&width=800&height=600&dpr=1',
-        description: "Genius. Billionaire. Philanthropist. Tony Stark's confidence is only matched by his high-flying abilities as the hero called Iron Man."
-    },
-    {
         name: 'Captain America',
         image: 'https://www.lego.com/cdn/cs/set/assets/blt3062e48ab7b5c413/Capt-Sidekick-Tall-1.jpg?fit=crop&format=jpg&quality=80&width=800&height=600&dpr=1',
         description: "Recipient of the Super-Soldier serum, World War II hero Steve Rogers fights for American ideals as one of the world’s mightiest heroes and the leader of the Avengers."
+    },
+    {
+        name: 'Iron Man',
+        image: 'https://www.lego.com/cdn/cs/set/assets/bltfd0a02fe95ebbe70/CP_IronMan_Sidekick-Tall2.jpg?fit=crop&format=jpg&quality=80&width=800&height=600&dpr=1',
+        description: "Genius. Billionaire. Philanthropist. Tony Stark's confidence is only matched by his high-flying abilities as the hero called Iron Man."
     },
     {
         name: 'Thor',

@@ -5,6 +5,9 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="card-text">
+                            <p>
+                                <%= moment(chat.createdAt).calendar() %>
+                            </p>
                             <h5 class="card-title">
                                 <%= chat.author.username %>
                             </h5>
@@ -38,10 +41,12 @@
         <div class="col-3">
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Admin</h5>
-                    <p class="card-text">
-                        <%= club.admin.username %>
-                    </p>
+                    <h5 class="card-title">Admins</h5>
+                    <% for(admin of club.admins) { %>
+                        <p class="card-text">
+                            <%= admin.username %>
+                        </p>
+                        <% } %>
                 </div>
             </div>
             <div class="card">
@@ -51,6 +56,9 @@
                         <p class="card-text">
                             <%= member.username %>
                         </p>
+                        <form action="/clubs/<%= club._id %>/users/<%= member._id %>" method="POST">
+                            <button class="btn btn-success btn-sm">Make Admin</button>
+                        </form>
                         <% } %>
                 </div>
             </div>

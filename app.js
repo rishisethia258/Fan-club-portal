@@ -9,10 +9,15 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
+const Club = require('./models/club');
+var moment = require('moment');
 
 const userRoutes = require('./routes/users');
 const clubRoutes = require('./routes/clubs');
 const chatRoutes = require('./routes/chats');
+const catchAsync = require('./utils/catchAsync');
+const club = require('./models/club');
+const { ESRCH } = require('constants');
 
 mongoose.connect('mongodb://localhost:27017/fan-club', {
     useNewUrlParser: true,
@@ -36,6 +41,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.locals.moment = moment;
 
 const sessionConfig = {
     secret: 'nothingmuch',

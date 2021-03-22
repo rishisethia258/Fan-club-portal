@@ -14,7 +14,8 @@ module.exports.renderNewForm = (req, res) => {
 module.exports.createClub = async (req, res, next) => {
     const club = new Club(req.body.club);
     const user = await User.findById(req.user._id);
-    club.admin = req.user._id;
+    club.createdBy = req.user.username;
+    club.admins.push(req.user._id);
     user.adminOf.push(club);
     await club.save();
     await user.save();
@@ -59,7 +60,7 @@ module.exports.deleteClub = async (req, res) => {
 module.exports.joinClub = async (req, res) => {
     const club = await Club.findById(req.params.id);
     const user = await User.findById(req.user._id);
-    if (club.admin.equals(user._id)) {
+    if (club.admins.indexOf(user._id) !== -1) {
         req.flash('error', `You are the admin of the club`);
         return res.redirect(`/clubs/${club._id}`);
     }

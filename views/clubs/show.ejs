@@ -13,14 +13,15 @@
                     </p>
                 </div>
                 <div class="card-body">
-                    <% if(currentUser && club.admin.equals(currentUser._id)) { %>
+                    <% if(currentUser && club.admins.indexOf(currentUser._id) !==-1) { %>
                         <a class="card-link btn btn-info" href="/clubs/<%=club._id%>/edit">Edit</a>
                         <form class="d-inline" action="/clubs/<%=club._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-danger">Delete</button>
                         </form>
                         <% } %>
                             <% if(currentUser) { %>
-                                <%if(club.admin.equals(currentUser._id)||club.members.indexOf(currentUser._id)!=-1){%>
+                                <%if(club.admins.indexOf(currentUser._id) !==-1||
+                                    club.members.indexOf(currentUser._id)!=-1){%>
                                     <a href="/clubs/<%=club._id%>/chat" class="btn btn-success">Go To Chat</a>
                                     <% } else { %>
                                         <form class="d-inline" action="/clubs/<%=club._id%>/join" method="POST">
@@ -31,11 +32,11 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text text-muted">
-                        Created by <%= club.admin.username %>
+                        Created by <%= club.createdBy %>
                     </p>
                 </div>
                 <div class="card-footer text-muted">
-                    2 days ago
+                    <%= moment(club.createdAt).fromNow() %>
                 </div>
             </div>
         </div>
