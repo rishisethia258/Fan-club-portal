@@ -10,6 +10,7 @@ Fan.io is a web-app for some die hard fans of various characters. You can join v
 - Fully protected routes
 - Give Admin role to other members
 - UI with flash messages to improve user interaction
+- Responsive to all screen sizes
 
 ## Tech Stack
 - NodeJs in Backend with MongoDB as database.
