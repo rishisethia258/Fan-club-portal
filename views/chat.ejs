@@ -24,8 +24,11 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="navbar-nav">
                     <a class="nav-link" href="/">Home</a>
-                    <a class="nav-link" href="/clubs">All Clubs</a>
-                    <a class="nav-link" href="/clubs/new">Create Club</a>
+                    <% if(currentUser) { %>
+                        <a class="nav-link" href="/yourclubs">Your Clubs</a>
+                        <% } %>
+                            <a class="nav-link" href="/clubs">All Clubs</a>
+                            <a class="nav-link" href="/clubs/new">Create Club</a>
                 </div>
                 <div class="navbar-nav ms-auto">
                     <% if(!currentUser) { %>
@@ -118,21 +121,23 @@
                                 <%= admin.username %>
                             </p>
                             <% } %>
-                                <hr>
-                                <h5 class="card-title">Members</h5>
-                                <% for(member of club.members) { %>
-                                    <div class="d-flex justify-content-center">
-                                        <p class="card-text">
-                                            <%= member.username %>
-                                        </p>
-                                        <% if(club.isAdmin) { %>
-                                            <form action="/clubs/<%= club._id %>/users/<%= member._id %>" class="ms-2"
-                                                method="POST">
-                                                <button class="btn btn-success btn-sm">Make Admin</button>
-                                            </form>
-                                            <% } %>
+                                <% if(club.members.length !=0) { %>
+                                    <hr>
+                                    <h5 class="card-title">Members</h5>
+                                    <% for(member of club.members) { %>
+                                        <div class="d-flex justify-content-center">
+                                            <p class="card-text">
+                                                <%= member.username %>
+                                            </p>
+                                            <% if(club.isAdmin) { %>
+                                                <form action="/clubs/<%= club._id %>/users/<%= member._id %>"
+                                                    class="ms-2" method="POST">
+                                                    <button class="btn btn-success btn-sm">Make Admin</button>
+                                                </form>
                                                 <% } %>
-                                    </div>
+                                                    <% } %>
+                                                        <% } %>
+                                        </div>
                     </div>
                 </div>
             </div>

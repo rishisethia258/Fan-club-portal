@@ -17,7 +17,7 @@ db.once("open", () => {
 
 const seedDB = async () => {
     await Club.deleteMany({});
-    const user = await User.findById('6058546322d7541294bbf9b5');
+    const user = await User.findById('6058b3fec51adf48b866cc6e');
     for (let i = 0; i < seedData.length; i++) {
         const club = new Club({
             name: seedData[i].name,

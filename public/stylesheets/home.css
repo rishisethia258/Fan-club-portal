@@ -1,7 +1,7 @@
 body {
     height: 100vh;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://mlpnk72yciwc.i.optimole.com/cqhiHLc.WqA8~2eefa/w:auto/h:auto/q:75/https://bleedingcool.com/wp-content/uploads/2020/07/Wall-of-Images.jpg");
+    url("images/home.jpg");
     background-size: cover;
     background-position: center;
     text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);

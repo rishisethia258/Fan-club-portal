@@ -56,3 +56,8 @@ module.exports.makeAdmin = async (req, res) => {
     await user.save();
     res.redirect(`/clubs/${id}/chat`);
 }
+
+module.exports.getYourClubsPage = async (req, res) => {
+    const user = await User.findById(req.user._id).populate('adminOf').populate('memberOf');
+    res.render('chatIndex', { user });
+}
